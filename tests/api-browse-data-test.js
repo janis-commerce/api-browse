@@ -5,10 +5,10 @@ const { Controller } = require('@janiscommerce/model-controller');
 
 const sandbox = require('sinon').createSandbox();
 
-const ApiBrowse = require('..');
+const { ApiBrowseData } = require('..');
 const { ApiBrowseError } = require('../lib');
 
-describe('Api Browse', () => {
+describe('Api Browse Data', () => {
 
 	afterEach(() => {
 		sandbox.restore();
@@ -22,10 +22,10 @@ describe('Api Browse', () => {
 				foo: 'bar'
 			};
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.pathParameters = pathParameters;
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.pathParameters = pathParameters;
 
-			const apiPathParameters = apiBrowse.pathParameters;
+			const apiPathParameters = apiBrowseData.pathParameters;
 
 			assert.deepStrictEqual(apiPathParameters, pathParameters);
 		});
@@ -39,10 +39,10 @@ describe('Api Browse', () => {
 				foo: 'bar'
 			};
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.data = data;
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.data = data;
 
-			const apiData = apiBrowse.data;
+			const apiData = apiBrowseData.data;
 
 			assert.deepStrictEqual(apiData, data);
 		});
@@ -52,10 +52,10 @@ describe('Api Browse', () => {
 
 		it('Should return the set value', () => {
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.code = 500;
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.code = 500;
 
-			const apiResponse = apiBrowse.response;
+			const apiResponse = apiBrowseData.response;
 
 			assert.deepStrictEqual(apiResponse, {
 				body: undefined,
@@ -73,12 +73,12 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.throws('Controller does not exist');
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			assert.throws(() => apiBrowse.validate(), ApiBrowseError);
+			assert.throws(() => apiBrowseData.validate(), ApiBrowseError);
 
 			sandbox.assert.calledOnce(controllerStub);
 			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
@@ -89,12 +89,12 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			const validation = apiBrowse.validate();
+			const validation = apiBrowseData.validate();
 
 			assert.strictEqual(validation, undefined);
 
@@ -107,17 +107,17 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			const validation = apiBrowse.validate();
+			const validation = apiBrowseData.validate();
 
 			assert.strictEqual(validation, undefined);
 
-			assert.deepStrictEqual(apiBrowse.dataWithDefaults, {});
-			assert.deepStrictEqual(apiBrowse.headersWithDefaults, {
+			assert.deepStrictEqual(apiBrowseData.dataWithDefaults, {});
+			assert.deepStrictEqual(apiBrowseData.headersWithDefaults, {
 				'x-janis-page': 1,
 				'x-janis-page-size': 60
 			});
@@ -131,23 +131,23 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			class MyApiBrowse extends ApiBrowse {
+			class MyApiBrowseData extends ApiBrowseData {
 				get sortableFields() {
 					return ['id'];
 				}
 			}
 
-			const apiBrowse = new MyApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			const validation = apiBrowse.validate();
+			const validation = apiBrowseData.validate();
 
 			assert.strictEqual(validation, undefined);
 
-			assert.deepStrictEqual(apiBrowse.dataWithDefaults, {});
-			assert.deepStrictEqual(apiBrowse.headersWithDefaults, {
+			assert.deepStrictEqual(apiBrowseData.dataWithDefaults, {});
+			assert.deepStrictEqual(apiBrowseData.headersWithDefaults, {
 				'x-janis-page': 1,
 				'x-janis-page-size': 60
 			});
@@ -161,14 +161,14 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				sortBy: 'id'
 			};
-			apiBrowse.headers = {};
+			apiBrowseData.headers = {};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('sortBy')
 					&& !!err.message.includes('id')
@@ -183,20 +183,20 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			class MyApiBrowse extends ApiBrowse {
+			class MyApiBrowseData extends ApiBrowseData {
 				get sortableFields() {
 					return ['id'];
 				}
 			}
 
-			const apiBrowse = new MyApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				sortBy: 'invalidField'
 			};
-			apiBrowse.headers = {};
+			apiBrowseData.headers = {};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('sortBy')
 					&& !!err.message.includes('invalidField');
@@ -210,21 +210,21 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			class MyApiBrowse extends ApiBrowse {
+			class MyApiBrowseData extends ApiBrowseData {
 				get sortableFields() {
 					return ['id'];
 				}
 			}
 
-			const apiBrowse = new MyApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				sortBy: 'id',
 				sortDirection: 'unknownValue'
 			};
-			apiBrowse.headers = {};
+			apiBrowseData.headers = {};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('sortDirection')
 					&& !!err.message.includes('unknownValue');
@@ -238,14 +238,14 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {
 				'x-janis-page': -10
 			};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('x-janis-page')
 					&& !!err.message.includes('-10');
@@ -259,14 +259,14 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {
 				'x-janis-page-size': -10
 			};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('x-janis-page-size')
 					&& !!err.message.includes('-10');
@@ -280,16 +280,16 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				filters: {
 					foo: 'bar'
 				}
 			};
-			apiBrowse.headers = {};
+			apiBrowseData.headers = {};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('filters')
 					&& !!err.message.includes('undefined');
@@ -303,22 +303,22 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			class MyApiBrowse extends ApiBrowse {
+			class MyApiBrowseData extends ApiBrowseData {
 				get availableFilters() {
 					return ['id'];
 				}
 			}
 
-			const apiBrowse = new MyApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				filters: {
 					foo: 'bar'
 				}
 			};
-			apiBrowse.headers = {};
+			apiBrowseData.headers = {};
 
-			assert.throws(() => apiBrowse.validate(), err => {
+			assert.throws(() => apiBrowseData.validate(), err => {
 				return err instanceof ApiBrowseError
 					&& !!err.message.includes('filters')
 					&& !!err.message.includes('id')
@@ -333,7 +333,7 @@ describe('Api Browse', () => {
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({});
 
-			class MyApiBrowse extends ApiBrowse {
+			class MyApiBrowseData extends ApiBrowseData {
 
 				get availableFilters() {
 					return [
@@ -350,9 +350,9 @@ describe('Api Browse', () => {
 				}
 			}
 
-			const apiBrowse = new MyApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				filters: {
 					id: '10',
 					id2: '100'
@@ -360,12 +360,12 @@ describe('Api Browse', () => {
 				sortBy: 'foo',
 				sortDirection: 'asc'
 			};
-			apiBrowse.headers = {
+			apiBrowseData.headers = {
 				'x-janis-page': '3',
 				'x-janis-page-size': '20'
 			};
 
-			const validation = apiBrowse.validate();
+			const validation = apiBrowseData.validate();
 
 			assert.strictEqual(validation, undefined);
 
@@ -385,14 +385,14 @@ describe('Api Browse', () => {
 				}
 			});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			apiBrowse.validate();
+			apiBrowseData.validate();
 
-			await assert.rejects(() => apiBrowse.process());
+			await assert.rejects(() => apiBrowseData.process());
 		});
 
 		it('Should pass the default parameters to the controller get', async () => {
@@ -406,14 +406,14 @@ describe('Api Browse', () => {
 				getTotals: getTotalsFake
 			});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			apiBrowse.validate();
+			apiBrowseData.validate();
 
-			await apiBrowse.process();
+			await apiBrowseData.process();
 
 			sandbox.assert.calledOnce(getFake);
 			sandbox.assert.calledWithExactly(getFake, {
@@ -433,7 +433,7 @@ describe('Api Browse', () => {
 				getTotals: getTotalsFake
 			});
 
-			class MyApiBrowse extends ApiBrowse {
+			class MyApiBrowseData extends ApiBrowseData {
 
 				get availableFilters() {
 					return [
@@ -450,9 +450,9 @@ describe('Api Browse', () => {
 				}
 			}
 
-			const apiBrowse = new MyApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {
 				sortBy: 'foo',
 				sortDirection: 'DESC',
 				filters: {
@@ -460,14 +460,14 @@ describe('Api Browse', () => {
 					id2: '100'
 				}
 			};
-			apiBrowse.headers = {
+			apiBrowseData.headers = {
 				'x-janis-page': 2,
 				'x-janis-page-size': 20
 			};
 
-			apiBrowse.validate();
+			apiBrowseData.validate();
 
-			await apiBrowse.process();
+			await apiBrowseData.process();
 
 			sandbox.assert.calledOnce(getFake);
 			sandbox.assert.calledWithExactly(getFake, {
@@ -494,14 +494,14 @@ describe('Api Browse', () => {
 				getTotals: getTotalsFake
 			});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			apiBrowse.validate();
+			apiBrowseData.validate();
 
-			const result = await apiBrowse.process();
+			const result = await apiBrowseData.process();
 
 			assert.deepStrictEqual(result, {
 				code: 200,
@@ -533,14 +533,14 @@ describe('Api Browse', () => {
 				getTotals: getTotalsFake
 			});
 
-			const apiBrowse = new ApiBrowse();
-			apiBrowse.entity = 'some-entity';
-			apiBrowse.data = {};
-			apiBrowse.headers = {};
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
 
-			apiBrowse.validate();
+			apiBrowseData.validate();
 
-			const result = await apiBrowse.process();
+			const result = await apiBrowseData.process();
 
 			assert.deepStrictEqual(result, {
 				code: 200,

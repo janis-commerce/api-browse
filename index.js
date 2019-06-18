@@ -1,5 +1,8 @@
 'use strict';
 
-const { ApiBrowse } = require('./lib');
+const { ApiBrowseData, ApiBrowseFilters } = require('./lib');
 
-module.exports = ApiBrowse;
+module.exports = {
+	ApiBrowseData,
+	ApiBrowseFilters
+};
