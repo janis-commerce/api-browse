@@ -50,6 +50,23 @@ describe('Api Browse Data', () => {
 			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 
+		it('Shouldn\'t thow because of unknown headers', () => {
+
+			const controllerStub = sandbox.stub(Controller, 'getInstance');
+			controllerStub.returns({});
+
+			const apiBrowseData = new ApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {
+				'x-foo': 'bar'
+			};
+
+			const validation = apiBrowseData.validate();
+
+			assert.strictEqual(validation, undefined);
+		});
+
 		it('Should set default values if no data is passed', () => {
 
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
