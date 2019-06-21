@@ -49,37 +49,22 @@ module.exports = MyApiBrowseData;
 
 const { ApiBrowseFilters } = require('@janiscommerce/api-browse');
 
-(async () => {
+class MyApiBrowseFilters extends ApiBrowseFilters {
 
-	const apiBrowseFilters = new ApiBrowseFilters();
+	get getFiltersValues() {
+		return {
+			someField: {
+				options: [
+					{ label: 'some.label1', value: 1 },
+					{ label: 'some.label2', value: 2 }
+				]
+			}
+		};
+	}
 
-	apiBrowseFilters.pathParameters = {
-		entity: 'someEntity'
-	};
+}
 
-	await apiBrowseFilters.validate();
-
-	const response = ApiBrowseFilters.process();
-
-	console.log(response);
-
-	/**
-	 * Expected output:
-	 *
-	 * {
-	 * 	code: 200,
-	 * 	body: {
-	 * 		rows: [
-	 * 			{ ... }
-	 * 		],
-	 * 		total: 20
-	 * 	}
-	 * }
-	 *
-	 * Or it will throw if an error occurs
-	 */
-
-})();
+module.exports = MyApiBrowseFilters;
 ```
 
 # Function minimal configuration

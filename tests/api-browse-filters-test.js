@@ -14,24 +14,6 @@ describe('Api Browse Filters', () => {
 		sandbox.restore();
 	});
 
-	describe('Code setter and response getter', () => {
-
-		it('Should return the set value', () => {
-
-			const apiBrowseFilters = new ApiBrowseFilters();
-			apiBrowseFilters.code = 500;
-
-			const apiResponse = apiBrowseFilters.response;
-
-			assert.deepStrictEqual(apiResponse, {
-				body: undefined,
-				code: 500,
-				headers: {},
-				cookies: {}
-			});
-		});
-	});
-
 	describe('Validation', () => {
 
 		it('Should throw if controller is not found', () => {

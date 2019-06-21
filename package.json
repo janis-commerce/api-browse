@@ -1,6 +1,6 @@
 {
   "name": "@janiscommerce/api-browse",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A package to handle JANIS Views Browse APIs",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "test": "tests"
   },
   "dependencies": {
+    "@janiscommerce/api-view": "^1.1.0",
     "@janiscommerce/model-controller": "^1.2.0",
     "superstruct": "^0.6.1"
   }

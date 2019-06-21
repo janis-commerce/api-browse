@@ -14,58 +14,6 @@ describe('Api Browse Data', () => {
 		sandbox.restore();
 	});
 
-	describe('Path parameter getter and setter', () => {
-
-		it('Should return the set value', () => {
-
-			const pathParameters = {
-				foo: 'bar'
-			};
-
-			const apiBrowseData = new ApiBrowseData();
-			apiBrowseData.pathParameters = pathParameters;
-
-			const apiPathParameters = apiBrowseData.pathParameters;
-
-			assert.deepStrictEqual(apiPathParameters, pathParameters);
-		});
-	});
-
-	describe('Data getter and setter', () => {
-
-		it('Should return the set value', () => {
-
-			const data = {
-				foo: 'bar'
-			};
-
-			const apiBrowseData = new ApiBrowseData();
-			apiBrowseData.data = data;
-
-			const apiData = apiBrowseData.data;
-
-			assert.deepStrictEqual(apiData, data);
-		});
-	});
-
-	describe('Code setter and response getter', () => {
-
-		it('Should return the set value', () => {
-
-			const apiBrowseData = new ApiBrowseData();
-			apiBrowseData.code = 500;
-
-			const apiResponse = apiBrowseData.response;
-
-			assert.deepStrictEqual(apiResponse, {
-				body: undefined,
-				code: 500,
-				headers: {},
-				cookies: {}
-			});
-		});
-	});
-
 	describe('Validation', () => {
 
 		it('Should throw if controller is not found', () => {
