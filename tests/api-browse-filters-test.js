@@ -95,7 +95,7 @@ describe('Api Browse Filters', () => {
 			});
 		});
 
-		it('Should throw an internal error if getFiltersValues throws', async () => {
+		it('Should return an object of filters if no errors occur', async () => {
 
 			const theFilters = {
 				foo: {
@@ -122,13 +122,10 @@ describe('Api Browse Filters', () => {
 
 			apiBrowseFilters.validate();
 
-			const result = await apiBrowseFilters.process();
+			await apiBrowseFilters.process();
 
-			assert.deepStrictEqual(result, {
-				code: 200,
-				body: {
-					filters: theFilters
-				}
+			assert.deepStrictEqual(apiBrowseFilters.response.body, {
+				filters: theFilters
 			});
 		});
 	});

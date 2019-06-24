@@ -466,14 +466,11 @@ describe('Api Browse Data', () => {
 
 			apiBrowseData.validate();
 
-			const result = await apiBrowseData.process();
+			await apiBrowseData.process();
 
-			assert.deepStrictEqual(result, {
-				code: 200,
-				body: {
-					rows: [],
-					total: 0
-				}
+			assert.deepStrictEqual(apiBrowseData.response.body, {
+				rows: [],
+				total: 0
 			});
 
 			sandbox.assert.calledOnce(getFake);
@@ -505,14 +502,11 @@ describe('Api Browse Data', () => {
 
 			apiBrowseData.validate();
 
-			const result = await apiBrowseData.process();
+			await apiBrowseData.process();
 
-			assert.deepStrictEqual(result, {
-				code: 200,
-				body: {
-					rows: [row],
-					total: 100
-				}
+			assert.deepStrictEqual(apiBrowseData.response.body, {
+				rows: [row],
+				total: 100
 			});
 
 			sandbox.assert.calledOnce(getFake);
