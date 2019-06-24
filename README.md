@@ -38,6 +38,10 @@ class MyApiBrowseData extends ApiBrowseData {
 		];
 	}
 
+	async formatRows(rows) {
+		return rows.map(row => ({ ...row, oneMoreField: true }));
+	}
+
 }
 
 module.exports = MyApiBrowseData;

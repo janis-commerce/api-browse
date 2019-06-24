@@ -1,10 +1,10 @@
 {
   "name": "@janiscommerce/api-browse",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "description": "A package to handle JANIS Views Browse APIs",
   "main": "index.js",
   "scripts": {
-    "test": "export TEST_ENV=true; mocha --exit -R nyan --recursive tests/",
+    "test": "mocha --exit -R nyan --recursive tests/",
     "test-ci": "nyc --reporter=html --reporter=text mocha --recursive tests/",
     "watch-test": "export TEST_ENV=true; mocha --exit -R nyan -w --recursive tests/",
     "coverage": "nyc npm test",

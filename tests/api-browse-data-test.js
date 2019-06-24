@@ -516,6 +516,53 @@ describe('Api Browse Data', () => {
 			});
 		});
 
+		it('Should return a rows array (formatted) and total rows if passed params do find results', async () => {
+
+			class MyApiBrowseData extends ApiBrowseData {
+
+				formatRows(rows) {
+					return rows.map(row => ({ ...row, moreFoo: true }));
+				}
+
+			}
+
+			const row = {
+				foo: 'bar'
+			};
+
+			const getFake = sandbox.fake.returns([row]);
+			const getTotalsFake = sandbox.fake.returns(100);
+
+			const controllerStub = sandbox.stub(Controller, 'getInstance');
+			controllerStub.returns({
+				get: getFake,
+				getTotals: getTotalsFake
+			});
+
+			const apiBrowseData = new MyApiBrowseData();
+			apiBrowseData.entity = 'some-entity';
+			apiBrowseData.data = {};
+			apiBrowseData.headers = {};
+
+			apiBrowseData.validate();
+
+			await apiBrowseData.process();
+
+			assert.deepStrictEqual(apiBrowseData.response.body, {
+				rows: [{
+					foo: 'bar',
+					moreFoo: true
+				}],
+				total: 100
+			});
+
+			sandbox.assert.calledOnce(getFake);
+			sandbox.assert.calledWithExactly(getFake, {
+				page: 1,
+				limit: 60
+			});
+		});
+
 	});
 
 });
