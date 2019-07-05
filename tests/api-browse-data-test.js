@@ -363,7 +363,7 @@ describe('Api Browse Data', () => {
 		it('Should pass the default parameters to the controller get', async () => {
 
 			const getFake = sandbox.fake.returns([]);
-			const getTotalsFake = sandbox.fake.returns(0);
+			const getTotalsFake = sandbox.fake.returns({ total: 0 });
 
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({
@@ -390,7 +390,7 @@ describe('Api Browse Data', () => {
 		it('Should pass client defined parameters to the controller get', async () => {
 
 			const getFake = sandbox.fake.returns([]);
-			const getTotalsFake = sandbox.fake.returns(0);
+			const getTotalsFake = sandbox.fake.returns({ total: 0 });
 
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({
@@ -451,7 +451,7 @@ describe('Api Browse Data', () => {
 		it('Should return an empty rows array and zero total rows if passed params do not find any result', async () => {
 
 			const getFake = sandbox.fake.returns([]);
-			const getTotalsFake = sandbox.fake.returns(0);
+			const getTotalsFake = sandbox.fake.returns({ total: 0 });
 
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({
@@ -487,7 +487,7 @@ describe('Api Browse Data', () => {
 			};
 
 			const getFake = sandbox.fake.returns([row]);
-			const getTotalsFake = sandbox.fake.returns(100);
+			const getTotalsFake = sandbox.fake.returns({ total: 100 });
 
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({
@@ -531,7 +531,7 @@ describe('Api Browse Data', () => {
 			};
 
 			const getFake = sandbox.fake.returns([row]);
-			const getTotalsFake = sandbox.fake.returns(100);
+			const getTotalsFake = sandbox.fake.returns({ total: 100 });
 
 			const controllerStub = sandbox.stub(Controller, 'getInstance');
 			controllerStub.returns({
