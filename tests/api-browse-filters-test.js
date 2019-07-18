@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert');
-const { Controller } = require('@janiscommerce/model-controller');
 
 const sandbox = require('sinon').createSandbox();
 
@@ -16,10 +15,10 @@ describe('Api Browse Filters', () => {
 
 	describe('Validation', () => {
 
-		it('Should throw if controller is not found', () => {
+		it('Should throw if model is not found', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.throws('Controller does not exist');
+			const getModelInstanceFake = sandbox.stub(ApiBrowseFilters.prototype, '_getModelInstance');
+			getModelInstanceFake.throws('Model does not exist');
 
 			const apiBrowseFilters = new ApiBrowseFilters();
 			apiBrowseFilters.entity = 'some-entity';
@@ -27,15 +26,12 @@ describe('Api Browse Filters', () => {
 			apiBrowseFilters.headers = {};
 
 			assert.throws(() => apiBrowseFilters.validate(), ApiBrowseError);
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 
-		it('Should validate if controller is found', () => {
+		it('Should validate if model is found', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseFilters.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseFilters = new ApiBrowseFilters();
 			apiBrowseFilters.entity = 'some-entity';
@@ -45,9 +41,6 @@ describe('Api Browse Filters', () => {
 			const validation = apiBrowseFilters.validate();
 
 			assert.strictEqual(validation, undefined);
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 	});
 
@@ -55,8 +48,8 @@ describe('Api Browse Filters', () => {
 
 		it('Should throw an internal error if getFiltersValues is not overriden', async () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseFilters.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseFilters = new ApiBrowseFilters();
 			apiBrowseFilters.entity = 'some-entity';
@@ -79,8 +72,8 @@ describe('Api Browse Filters', () => {
 				}
 			}
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseFilters.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseFilters = new MyApiBrowseFilters();
 			apiBrowseFilters.entity = 'some-entity';
@@ -112,8 +105,8 @@ describe('Api Browse Filters', () => {
 				}
 			}
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseFilters.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseFilters = new MyApiBrowseFilters();
 			apiBrowseFilters.entity = 'some-entity';

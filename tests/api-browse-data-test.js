@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert');
-const { Controller } = require('@janiscommerce/model-controller');
 
 const sandbox = require('sinon').createSandbox();
 
@@ -16,10 +15,10 @@ describe('Api Browse Data', () => {
 
 	describe('Validation', () => {
 
-		it('Should throw if controller is not found', () => {
+		it('Should throw if model is not found', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.throws('Controller does not exist');
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.throws('Model does not exist');
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -27,15 +26,12 @@ describe('Api Browse Data', () => {
 			apiBrowseData.headers = {};
 
 			assert.throws(() => apiBrowseData.validate(), ApiBrowseError);
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 
 		it('Should validate if no data is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -45,15 +41,12 @@ describe('Api Browse Data', () => {
 			const validation = apiBrowseData.validate();
 
 			assert.strictEqual(validation, undefined);
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 
 		it('Shouldn\'t thow because of unknown headers', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -69,8 +62,8 @@ describe('Api Browse Data', () => {
 
 		it('Should set default values if no data is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -86,15 +79,12 @@ describe('Api Browse Data', () => {
 				'x-janis-page': 1,
 				'x-janis-page-size': 60
 			});
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 
 		it('Should set default sort direction if only sort field is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			class MyApiBrowseData extends ApiBrowseData {
 				get sortableFields() {
@@ -116,15 +106,12 @@ describe('Api Browse Data', () => {
 				'x-janis-page': 1,
 				'x-janis-page-size': 60
 			});
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 
 		it('Should throw if sort field is passed and there are no sortable fields', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -139,14 +126,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('id')
 					&& !!err.message.includes('undefined');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should throw if invalid sort field is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			class MyApiBrowseData extends ApiBrowseData {
 				get sortableFields() {
@@ -166,14 +151,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('sortBy')
 					&& !!err.message.includes('invalidField');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should throw if invalid sort direction is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			class MyApiBrowseData extends ApiBrowseData {
 				get sortableFields() {
@@ -194,14 +177,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('sortDirection')
 					&& !!err.message.includes('unknownValue');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should throw if invalid page is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -215,14 +196,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('x-janis-page')
 					&& !!err.message.includes('-10');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should throw if invalid page size is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -236,14 +215,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('x-janis-page-size')
 					&& !!err.message.includes('-10');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should throw if filter is passed and there are no available filters', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			const apiBrowseData = new ApiBrowseData();
 			apiBrowseData.entity = 'some-entity';
@@ -259,14 +236,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('filters')
 					&& !!err.message.includes('undefined');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should throw if invalid filter is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			class MyApiBrowseData extends ApiBrowseData {
 				get availableFilters() {
@@ -289,14 +264,12 @@ describe('Api Browse Data', () => {
 					&& !!err.message.includes('id')
 					&& !!err.message.includes('filters.foo');
 			});
-
-			sandbox.assert.notCalled(controllerStub);
 		});
 
 		it('Should validate if valid data is passed', () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({});
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({});
 
 			class MyApiBrowseData extends ApiBrowseData {
 
@@ -333,9 +306,6 @@ describe('Api Browse Data', () => {
 			const validation = apiBrowseData.validate();
 
 			assert.strictEqual(validation, undefined);
-
-			sandbox.assert.calledOnce(controllerStub);
-			sandbox.assert.calledWithExactly(controllerStub, 'some-entity');
 		});
 	});
 
@@ -343,8 +313,8 @@ describe('Api Browse Data', () => {
 
 		it('Should throw an internal error if get fails', async () => {
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({
 				get: () => {
 					throw new Error('Some internal error');
 				}
@@ -360,13 +330,13 @@ describe('Api Browse Data', () => {
 			await assert.rejects(() => apiBrowseData.process());
 		});
 
-		it('Should pass the default parameters to the controller get', async () => {
+		it('Should pass the default parameters to the model get', async () => {
 
 			const getFake = sandbox.fake.returns([]);
 			const getTotalsFake = sandbox.fake.returns({ total: 0 });
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({
 				get: getFake,
 				getTotals: getTotalsFake
 			});
@@ -387,13 +357,13 @@ describe('Api Browse Data', () => {
 			});
 		});
 
-		it('Should pass client defined parameters to the controller get', async () => {
+		it('Should pass client defined parameters to the model get', async () => {
 
 			const getFake = sandbox.fake.returns([]);
 			const getTotalsFake = sandbox.fake.returns({ total: 0 });
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({
 				get: getFake,
 				getTotals: getTotalsFake
 			});
@@ -453,8 +423,8 @@ describe('Api Browse Data', () => {
 			const getFake = sandbox.fake.returns([]);
 			const getTotalsFake = sandbox.fake.returns({ total: 0 });
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({
 				get: getFake,
 				getTotals: getTotalsFake
 			});
@@ -489,8 +459,8 @@ describe('Api Browse Data', () => {
 			const getFake = sandbox.fake.returns([row]);
 			const getTotalsFake = sandbox.fake.returns({ total: 100 });
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({
 				get: getFake,
 				getTotals: getTotalsFake
 			});
@@ -533,8 +503,8 @@ describe('Api Browse Data', () => {
 			const getFake = sandbox.fake.returns([row]);
 			const getTotalsFake = sandbox.fake.returns({ total: 100 });
 
-			const controllerStub = sandbox.stub(Controller, 'getInstance');
-			controllerStub.returns({
+			const getModelInstanceFake = sandbox.stub(ApiBrowseData.prototype, '_getModelInstance');
+			getModelInstanceFake.returns({
 				get: getFake,
 				getTotals: getTotalsFake
 			});
