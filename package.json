@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "@janiscommerce/api-view": "^1.2.0",
-    "@janiscommerce/model": "^1.1.0",
     "superstruct": "^0.6.1"
   }
 }
